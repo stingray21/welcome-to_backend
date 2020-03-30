@@ -1,6 +1,7 @@
 const pgp = require('pg-promise')(/* initialization options */);
 
-// console.log(process.env.DB_USER, process.env.DB_PASSWORD);
+// console.log('DB USER: ', process.env.DB_USER);
+// console.log('DB PASSWORD: ', process.env.DB_PASSWORD);
 
 module.exports = (param) => {
 	const cn = {
@@ -15,6 +16,16 @@ module.exports = (param) => {
 	// var cn = 'postgres://username:password@host:port/database';
 
 	const db = pgp(cn); // database instance;
+
+	// TEST CONNECTION
+	// db
+	// 	.connect()
+	// 	.then(function (obj) {
+	// 		obj.done(); // success, release connection;
+	// 	})
+	// 	.catch(function (error) {
+	// 		console.log('ERROR:', error.message);
+	// 	});
 
 	return db;
 };
