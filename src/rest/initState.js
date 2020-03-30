@@ -2,6 +2,9 @@ const updateState = require('./updateState');
 const saveState = require('./saveState');
 
 module.exports = async (db, gameId, name) => {
+	// TODO: get only one plan each
+	// e.g. SELECT * FROM myTable WHERE attribute = 'myValue' ORDER BY random() LIMIT 1000;
+
 	db
 		.task('get-resources', async (t) => {
 			const plan1 = await t.any(
