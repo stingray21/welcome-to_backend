@@ -1,6 +1,6 @@
 const pgp = require('pg-promise')(/* initialization options */);
 
-// console.log('DB USER: ', process.env.DB_USER);
+console.log('DB USER: ', process.env.DB_USER);
 // console.log('DB PASSWORD: ', process.env.DB_PASSWORD);
 
 module.exports = (param) => {

@@ -1,6 +1,12 @@
 const health = require('./health');
 
-require('dotenv').config();
+const result = require('dotenv').config();
+//console.log('ENV: ', process.env);
+if (result.error) {
+	throw result.error;
+}
+// console.log("Parsed .env: ",result.parsed);
+
 const pgp = require('pg-promise')({
 	/* initialization options */
 	capSQL: true // capitalize all generated SQL
