@@ -1,12 +1,12 @@
 module.exports = async (db, gameId, state, name) => {
 	if (name === undefined) {
-		name = 'Unnamed';
+		name = 'Default';
 	}
 
 	let result;
 	await db
 		.query(
-			'INSERT INTO games(game_id, state, name, timestamp) VALUES($<id>,$<state>,$<name>,NOW() ) ON CONFLICT(game_id) DO UPDATE SET state = $<state>, timestamp = NOW()',
+			'INSERT INTO games(game_id, state, name, timestamp) VALUES($<id>,$<state>,$<name>,NOW() ) ON CONFLICT(game_id) DO UPDATE SET timestamp = NOW(), state = $<state> ',
 			{
 				id: gameId,
 				state: state,

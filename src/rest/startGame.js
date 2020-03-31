@@ -2,14 +2,16 @@ const initialize = require('./initState');
 
 module.exports = async (req, res) => {
 	// console.log('GameId:', req.params.gameId);
-	let gameId = req.params.gameId;
-	if (gameId === undefined) {
-		gameId = Math.random().toString(36).substr(2, 9);
-	}
 	let newGame = false;
 	let name = req.query.name;
+	console.log('Game name:', name);
 	if (name === undefined) {
 		name = 'Unnamed';
+	}
+	let gameId = req.params.gameId;
+	if (gameId === undefined) {
+		// gameId = Math.random().toString(36).substr(2, 9);
+		gameId = encodeURIComponent(name.replace(/[^a-zA-Z0-9]+/gm, '').toLowerCase());
 	}
 	console.log(name);
 
