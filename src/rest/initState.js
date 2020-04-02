@@ -13,8 +13,8 @@ module.exports = async (db, gameId, name) => {
 			const plan3 = await t.one(
 				"SELECT plan -> 'cat' AS cat, plan -> 'id' AS id, plan -> 'first' AS first, plan -> 'others' AS others FROM plans WHERE plan ->> 'cat' = '3' ORDER BY random() LIMIT 1;"
 			);
-
-			return [ plan1, plan2, plan3 ];
+			
+			return [ plan1.id, plan2.id, plan3.id ];
 		})
 		.then(async (plans) => {
 			// console.log(plans);
