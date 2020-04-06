@@ -2,11 +2,15 @@ module.exports = async (req, res) => {
 	let gameId = req.params.gameId;
 
 	req.db
-		.one("SELECT state -> 'currentSet' AS state FROM games WHERE game_id = $<id>", { id: gameId })
+		.one(
+			"SELECT state -> 'currentSet' AS currentSet, state -> 'additiveNextLimit' AS nextlimit FROM games WHERE game_id = $<id>",
+			{ id: gameId }
+		)
 		.then(async (data) => {
 			// console.log(data);
-			let state = data.state;
+			let state = data.currentset;
 
+			state.additiveNextLimit = data.nextlimit;
 			res.json(state);
 		})
 		.catch((error) => {

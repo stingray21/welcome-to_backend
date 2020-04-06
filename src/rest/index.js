@@ -16,6 +16,7 @@ const startGame = require('./startGame');
 const getGames = require('./getGames');
 const getState = require('./getState');
 const setState = require('./setState');
+const setSettings = require('./setSettings');
 const getHistory = require('./getHistory');
 const setPlans = require('./setPlans');
 const initialize = require('./initState');
@@ -42,6 +43,7 @@ module.exports = (app) => {
 	app.get('/welcome-api/:gameId/state', (req, res) => getState(req, res));
 	app.get('/welcome-api/:gameId/history', (req, res) => getHistory(req, res));
 	app.get('/welcome-api/:gameId/plans', (req, res) => setPlans(req, res));
+	app.get('/welcome-api/:gameId/settings', (req, res) => setSettings(req, res));
 	app.get('/welcome-api/:gameId/reset', (req, res) => resetState(req, res));
 };
 

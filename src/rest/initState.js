@@ -13,7 +13,7 @@ module.exports = async (db, gameId, name) => {
 			const plan3 = await t.one(
 				"SELECT plan -> 'cat' AS cat, plan -> 'id' AS id, plan -> 'first' AS first, plan -> 'others' AS others FROM plans WHERE plan ->> 'cat' = '3' ORDER BY random() LIMIT 1;"
 			);
-			
+
 			return [ plan1.id, plan2.id, plan3.id ];
 		})
 		.then(async (plans) => {
@@ -32,6 +32,8 @@ module.exports = async (db, gameId, name) => {
 			state.shuffled = false;
 			state.plans = plans;
 			state.plansApproved = [ false, false, false ];
+			state.additiveNext = 0;
+			state.additiveNextLimit = 0;
 
 			// let gameId = Math.random().toString(36).substr(2, 9);
 			if (gameId === undefined) gameId = 'default';

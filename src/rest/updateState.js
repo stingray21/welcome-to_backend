@@ -2,12 +2,13 @@ const saveState = require('./saveState');
 
 module.exports = async (db, gameId) => {
 	console.log('Start updateState');
-	let result;
+
 	await db
 		.one('SELECT state FROM games WHERE game_id = $<id>', { id: gameId })
 		.then(async (data) => {
 			// console.log(data);
 			let state = data.state;
+			console.log(state);
 
 			await updateStateProperties(db, state);
 			// console.log(state);
@@ -24,35 +25,43 @@ module.exports = async (db, gameId) => {
 };
 
 async function updateStateProperties(db, state) {
-	state.round++;
+	state.additiveNext += 1;
+	console.log('Additive Next', state.additiveNext, state.additiveNextLimit);
 
-	state.shuffled = false;
-	if (state.index <= 1) {
-		console.log('Shuffling cards');
+	if (state.additiveNext >= state.additiveNextLimit) {
+		console.log('Next round');
+		state.additiveNext = 0;
 
-		const cards = await db.any(
-			"SELECT card -> 'id' AS id, card -> 'number' AS number, card -> 'action' AS action FROM cards"
-		);
+		state.round++;
 
-		state.shuffledDecks = shuffleCards(cards, state.seed);
+		state.shuffled = false;
+		if (state.index <= 1) {
+			console.log('Shuffling cards');
 
-		state.index = state.shuffledDecks.length;
+			const cards = await db.any(
+				"SELECT card -> 'id' AS id, card -> 'number' AS number, card -> 'action' AS action FROM cards"
+			);
 
-		state.deckLog.push(state.shuffledDecks);
-		state.shuffled = true;
+			state.shuffledDecks = shuffleCards(cards, state.seed);
+
+			state.index = state.shuffledDecks.length;
+
+			state.deckLog.push(state.shuffledDecks);
+			state.shuffled = true;
+		}
+		state.index = state.index - 1;
+
+		state.currentSet = {
+			round: state.round,
+			actions: state.shuffledDecks[state.index],
+			numbers: state.shuffledDecks[state.index - 1],
+			shuffled: state.shuffled,
+			plans: state.plans,
+			plansApproved: state.plansApproved
+		};
+
+		state.history.push(state.currentSet);
 	}
-	state.index = state.index - 1;
-
-	state.currentSet = {
-		round: state.round,
-		actions: state.shuffledDecks[state.index],
-		numbers: state.shuffledDecks[state.index - 1],
-		shuffled: state.shuffled,
-		plans: state.plans,
-		plansApproved: state.plansApproved
-	};
-
-	state.history.push(state.currentSet);
 }
 
 function shuffleCards(cards, seed) {
