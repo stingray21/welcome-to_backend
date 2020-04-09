@@ -21,6 +21,7 @@ const getHistory = require('./getHistory');
 const setPlans = require('./setPlans');
 const initialize = require('./initState');
 const resetState = require('./resetState');
+const login = require('./login');
 
 const db = require('./db')();
 
@@ -45,6 +46,7 @@ module.exports = (app) => {
 	app.get('/welcome-api/:gameId/plans', (req, res) => setPlans(req, res));
 	app.get('/welcome-api/:gameId/settings', (req, res) => setSettings(req, res));
 	app.get('/welcome-api/:gameId/reset', (req, res) => resetState(req, res));
+	app.get('/welcome-api/:user/login', (req, res) => login(req, res));
 };
 
 function loadCardsInDB() {
